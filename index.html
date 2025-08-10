@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">⚖️</div>
+        <div class="brand-text">
+          <h1 class="title">BMI Calculator</h1>
+          <p class="subtitle">Calculate your Body Mass Index and understand your category.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card" aria-labelledby="your-details-heading">
+        <div class="card-header">
+          <h2 class="card-title" id="your-details-heading">Your Details</h2>
+          <p class="card-desc">Choose units, enter your measurements, and see results instantly.</p>
+        </div>
+
+        <div class="card-body grid-2">
+          <div class="panel">
+            <div class="segmented" role="group" aria-label="Unit selection">
+              <button type="button" class="segmented-btn is-active" id="btn-metric" aria-pressed="true">Metric</button>
+              <button type="button" class="segmented-btn" id="btn-imperial" aria-pressed="false">Imperial</button>
+            </div>
+
+            <form id="bmi-form" novalidate>
+               Metric inputs 
+              <div id="metric-fields">
+                <div class="field">
+                  <label class="label" for="weight-kg">Weight (kg)</label>
+                  <div class="input-wrap">
+                    <input id="weight-kg" name="weight-kg" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 70" required />
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label" for="height-cm">Height (cm)</label>
+                  <div class="input-wrap">
+                    <input id="height-cm" name="height-cm" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 175" required />
+                  </div>
+                </div>
+              </div>
+
+               Imperial inputs 
+              <div id="imperial-fields" hidden>
+                <div class="field">
+                  <label class="label" for="weight-lb">Weight (lb)</label>
+                  <div class="input-wrap">
+                    <input id="weight-lb" name="weight-lb" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 154" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Height</label>
+                  <div class="input-inline">
+                    <div class="input-wrap">
+                      <input id="height-ft" name="height-ft" type="number" inputmode="numeric" min="0" step="1" placeholder="ft" aria-label="Feet" />
+                    </div>
+                    <div class="input-wrap">
+                      <input id="height-in" name="height-in" type="number" inputmode="decimal" min="0" step="0.1" placeholder="in" aria-label="Inches" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="form-error" class="alert" role="alert" hidden>
+                Please enter positive values for both height and weight.
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn primary">Calculate</button>
+                <button type="button" id="btn-reset" class="btn">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="result-header">
+              <div>
+                <div class="muted">Your BMI</div>
+                <div class="bmi-line">
+                  <div id="bmi-value" class="bmi-value" aria-live="polite" aria-atomic="true">--</div>
+                  <span id="bmi-badge" class="badge">—</span>
+                </div>
+              </div>
+              <div class="legend">
+                <div class="legend-title">Categories</div>
+                <ul class="legend-list">
+                  <li><span class="dot teal"></span> Underweight <span class="legend-range">&lt; 18.5</span></li>
+                  <li><span class="dot green"></span> Normal <span class="legend-range">18.5–24.9</span></li>
+                  <li><span class="dot amber"></span> Overweight <span class="legend-range">25–29.9</span></li>
+                  <li><span class="dot rose"></span> Obese <span class="legend-range">≥ 30</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="scale-wrap" aria-label="BMI category scale">
+              <div class="scale">
+                <div class="seg teal" title="Underweight"></div>
+                <div class="seg green" title="Normal"></div>
+                <div class="seg amber" title="Overweight"></div>
+                <div class="seg rose" title="Obese"></div>
+                <div id="scale-marker" class="marker" aria-hidden="true"></div>
+              </div>
+              <div class="scale-ticks">
+                <span>12</span>
+                <span>18.5</span>
+                <span>25</span>
+                <span>30</span>
+                <span>40</span>
+              </div>
+            </div>
+
+            <div class="tiles">
+              <div class="tile">
+                <div class="muted">Height</div>
+                <div id="tile-height" class="tile-value">--</div>
+              </div>
+              <div class="tile">
+                <div class="muted">Weight</div>
+                <div id="tile-weight" class="tile-value">--</div>
+              </div>
+            </div>
+
+            <div class="card-sub">
+              <h3 class="sub-title">Healthy Weight Range</h3>
+              <p class="muted">Based on a BMI of 18.5 to 24.9 for your height.</p>
+              <div class="tiles">
+                <div class="tile">
+                  <div class="muted">Metric</div>
+                  <div id="range-metric" class="tile-value">--</div>
+                </div>
+                <div class="tile">
+                  <div class="muted">Imperial</div>
+                  <div id="range-imperial" class="tile-value">--</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info">
+              <h3 class="sub-title">What does this mean?</h3>
+              <p class="muted">
+                BMI is a simple index of weight-for-height used to classify underweight, overweight, and obesity in adults.
+                It does not directly measure body fat and may not be accurate for athletes or those with high muscle mass.
+              </p>
+              <ul class="info-list">
+                <li>Use BMI as a general guide, not a diagnostic tool.</li>
+                <li>Consider other indicators like waist circumference and body composition.</li>
+                <li>Consult a healthcare professional for personalized recommendations.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="disclaimer">
+        This calculator provides general guidance and is not a diagnostic tool.
+      </p>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
